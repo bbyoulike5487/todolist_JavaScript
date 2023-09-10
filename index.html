@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name='description' content='製作屬於自己的todolist' />
+    <meta name="keywords" content="HTML,CSS,JavaScript,API,前端,網頁設計,六角學院">
+    <meta name="author" content="MENG-HSUAN WU">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="todolist API" />
+    <meta property="og:description" content="製作屬於自己的todolist_六角學院Java Script最終作業">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="FB上的網址" />
+    <meta property="og:image" content="FB的圖片" />
+
+    <link href="img/shortcut.png" rel="shortcut icon" />
+    <link rel="stylesheet" href="style.css">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+    <title>todolist_Hex School</title>
+</head>
+<body>
+    <!--登入介面--> 
+    <div class="logIn">
+        <img src="img/left.png" alt="">
+        <div class="loginInput">
+            <h1>最實用的線上待辦事項服務</h1>
+            <form action="#">
+                <label for="loginemail">Email</label>
+                <br>
+                <input type="email" id="loginemail" placeholder="請輸入email">
+                <div class="wrong_email none">此欄位不可為空</div>
+                <label for="loginpassword">Password</label>
+                <br>
+                <input type="password" id="loginpassword" placeholder="請輸入密碼">
+                <div class="wrong_password none">請輸入正確密碼</div>
+                <input type="button" class="loginBtn" value="登入">
+                <br>
+                <input type="button" class="signupBtn" value="註冊">
+            </form>
+        </div>
+    </div>
+    
+    <!--註冊介面--> 
+    <div class="signUp" style="display:none"></div>
+    <!--todolist介面
+    <div class="container" style="display:none"></div>--> 
+
+    <script src="all.js"></script>
+</body>
+</html>
