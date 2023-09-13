@@ -24,30 +24,83 @@
 <body>
     <!--登入介面--> 
     <div class="logIn">
-        <img src="img/left.png" alt="">
+        <img class="left" src="img/left.png" alt="">
         <div class="loginInput">
             <h1>最實用的線上待辦事項服務</h1>
             <form action="#">
                 <label for="loginemail">Email</label>
-                <br>
                 <input type="email" id="loginemail" placeholder="請輸入email">
-                <div class="wrong_email none">此欄位不可為空</div>
+                <div class="wrong_email none">帳號不可為空</div>
                 <label for="loginpassword">Password</label>
-                <br>
                 <input type="password" id="loginpassword" placeholder="請輸入密碼">
-                <div class="wrong_password none">請輸入正確密碼</div>
-                <input type="button" class="loginBtn" value="登入">
+                <div class="wrong_password none">密碼不可為空</div>
                 <br>
+                <input type="button" class="loginBtn" value="登入">
                 <input type="button" class="signupBtn" value="註冊">
             </form>
         </div>
     </div>
 
     <!--註冊介面--> 
-    <div class="signUp"></div>
+    <div class="signUp none">
+        <img class="left" src="img/left.png" alt="">
+        <div class="singupInput">
+            <h1>註冊帳號</h1>
+            <form action="#">
+                <label for="singupemail">Email</label>
+                <input type="email" id="singupemail" placeholder="請輸入email">
+                <label for="name">Name</label>
+                <input type="text" id="nickname" placeholder="請輸入暱稱">
+                <label for="singuppassword">Password</label>
+                <input type="password" id="singuppassword" placeholder="請輸入密碼">
+                <div class="wrong_singuppassword none">密碼請超過六位數！！</div>
+                <label for="singuppasswordAgain">Enter password again</label>
+                <input type="password" id="singuppasswordAgain" placeholder="請再次輸入密碼">
+                <div class="wrong_password_again none">兩次輸入密碼不同，請再次輸入！！</div>
+                <br>
+                <input type="button" class="signupBtn_2" value="註冊帳號">
+                <input type="button" class="loginBtn_2" value="重新登入">
+            </form>
+        </div>
+    </div>
     <!--todolist介面--> 
-    <div class="container" style="display:none"></div>
+    <div class="todo none">
+        <div class="header">
+            <img class="logo" src="img/logo.png" alt="">
+            <ul>
+                <li class="userName"></li>
+                <li class="signOut"><a href="#">登出</a></li>
+            </ul>
+        </div>
+        <div class="container">
+            <div class="card input">
+                <input type="text" class="txt" placeholder="請輸入待辦事項" id="input" />
+                <a href="#" class="btn_add">+</a>
+            </div>
+                <div class="listEmpty none">
+                    <p>目前尚無待辦事項</p>
+                    <img src="img/empty.png" alt="empty">
+                </div>
+                <div class="card card_list">
+                    <ul class="tab">
+                      <li class="active" data-tab="all" id="all">全部</li>
+                      <li data-tab="work">待完成</li>
+                      <li data-tab="done">已完成</li>
+                    </ul>
+                    <div class="cart_content">
+                      <ul class="list"></ul>
+                      <div class="list_footer">
+                        <p><span class="todoLength">0</span> 個待完成項目</p>
+                        <a href="#" class="btn_clear">清除已完成項目</a>
+                      </div>
+                    </div>
+                </div>
+        </div>
+        </div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="all.js"></script>
 </body>
 </html>
