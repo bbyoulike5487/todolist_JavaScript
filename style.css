@@ -50,7 +50,7 @@ table {
 
 /*登入介面*/ /*註冊介面*/
 .logIn,.signUp{
-    background: #FFD370;
+    background: #8fd4e9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -73,7 +73,7 @@ h1{
 .loginInput form,.singupInput form{
     display: flex;
     flex-direction: column;
-    justify-content: space-btween;
+    justify-content: space-between;
 }
 .loginInput label,.wrong_email,.wrong_password,.singupInput label,.wrong_singuppassword,.wrong_password_again{
     font-size: 14px;
@@ -92,7 +92,7 @@ h1{
 }
 .wrong_email,.wrong_password,.wrong_singuppassword,.wrong_password_again{
     margin-bottom: 16px;
-    color: #D87355;
+    color: #ff0000;
 }
 .loginBtn,.signupBtn_2{
     color: white;
@@ -107,8 +107,9 @@ h1{
     cursor: pointer;
 }
 .loginBtn:hover,.signupBtn_2:hover{
+    font-size: 20px;
     color: black;
-    background: #D87355;
+    background: #fcddd7;
 }
 .signupBtn,.loginBtn_2{
     color: black;
@@ -123,7 +124,7 @@ h1{
     cursor: pointer;
 }
 .signupBtn:hover,.loginBtn_2:hover{
-    text-decoration: underline;
+    font-size: 20px;
 }
 
 /*todolist介面*/
@@ -131,7 +132,7 @@ h1{
     min-height: 100vh;
     background: #eee;
     color: #333;
-    background-image: linear-gradient(174deg, #ffd370 2%, #ffd370 60%, #ffffff 60%, #ffffff 100%, #e8e8e8 100%);
+    background-image: linear-gradient(174deg, #8fd4e9 2%, #8fd4e9 60%, #ffffff 60%, #ffffff 100%, #e8e8e8 100%);
     letter-spacing: 0.07em;
     font-family: "微軟正黑體";
 }
@@ -254,7 +255,18 @@ h1{
     background-image: url("https://i.imgur.com/7Q4RjFx.jpg");
     background-size: contain;
 }
-.list li:hover a.delete {
+.list li a.pen{
+    position: absolute;
+    opacity: 0;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    background: url("img/pen.png") no-repeat;
+    background-size: contain;
+}
+.list li:hover a.delete,.list li:hover a.pen{
     opacity: 1;
 }
 .list_footer {
@@ -284,17 +296,6 @@ h1{
     border-bottom: 1px solid #eee;
     line-height: 1.5;
 }
-.checkbox input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    cursor: pointer;
-    display: block;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-  }
   .checkbox span::before {
     content: "";
     position: absolute;
@@ -334,6 +335,59 @@ h1{
 .checkbox input:checked ~ span::after {
     opacity: 1;
 }
+.checkbox input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+  }
+
+/*編輯內容視窗*/
+.mask{
+    width: 300px;
+    background: #353535a0;
+    border-radius: 10px;
+    padding: 10px 5px;
+    position: fixed;
+    top: 40%;
+}
+.mask form{
+    text-align: center;
+}
+#maskTxt{
+    width: 250px;
+    height: 23px;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 4px 0px;
+}
+#maskTxt:focus{
+    background: #c5d9e9;
+}
+#maskbtn_t,#maskbtn_f{
+    font-size: 14px;
+    font-weight: bold;
+    width: 100px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+#maskbtn_t:hover{
+    color: white;
+    background: #f37171;
+}
+#maskbtn_f:hover{
+    color: white;
+    background: #686868;
+}
+
 
 /*切換介面*/
 .none{

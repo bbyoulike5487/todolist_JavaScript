@@ -28,6 +28,7 @@ function logIn(loginemail,loginpassword){
         logInPage.classList.add("none");
         todoPage.classList.remove("none");
         userName.innerHTML = `${res.data.nickname}的待辦`;
+        getTodo();
     })
     .catch((error) => { //登入失敗
         Swal.fire({
@@ -141,6 +142,8 @@ function nullValue(){
 
 //--todolist介面--
 const signOut = document.querySelector(".signOut a");
+const listEmpty = document.querySelector(".listEmpty");
+
 
 //請求登出
 function logOut(){
@@ -173,8 +176,75 @@ function getTodo(){
             "Authorization" : token
         }
     })
-    .then((res) => {})
-    .catch((error) => {console.log(error);})
+    .then((res) => {
+      //有無待辦事項呈現畫面
+      if(res.data.todos.length === 0){
+        listEmpty.classList.remove("none");
+        card_list.classList.add("none");
+      }else{
+        card_list.classList.remove("none");
+        listEmpty.classList.add("none");
+      }
+      data = res.data.todos; //前面data為原始資料
+      renderData();
+    })
+    .catch((error) => {console.log(error.response);})
+}
+
+//addTodo
+function addTodo(item){
+  axios.post(`${url}/todos`,{
+    "todo": {
+      "content": item
+    }
+  },{
+    headers: {
+        "Authorization" : token
+    }
+})
+  .then((res) => {getTodo();})
+  .catch((error) => {console.log(error.response);})
+}
+
+//updateTodo
+function updateTodo(item,todoID){
+  axios.put(`${url}/todos/${todoID}`,{
+    "todo": {
+      "content": item
+    }
+  },{
+    headers: {
+        "Authorization" : token
+    }
+})
+  .then((res) => {
+    getTodo();
+  }) 
+  .catch((error) => {console.log(error.response);})
+}
+
+//deleteTodo
+function deleteTodo(todoID){
+  axios.delete(`${url}/todos/${todoID}`,{
+    headers: {
+        "Authorization" : token
+    }
+})
+  .then((res) => {getTodo();})
+  .catch((error) => {console.log(error.response);})
+}
+
+//toggleTodo
+function toggleTodo(todoID){
+  axios.patch(`${url}/todos/${todoID}/toggle`,{},{
+    headers: {
+        "Authorization" : token
+    }
+})
+  .then((res) => {
+    getTodo();
+  })
+  .catch((error) => {console.log(error.response);})
 }
 
 //設一個空陣列
@@ -197,11 +267,10 @@ function add(e){
     txt.value = ""; //空值輸出後，清空文字欄位
     return; //切斷執行
   }
-  let obj = {};
-  obj.content = txt.value;
-  data.push(obj);
+  let obj = txt.value;
+  addTodo(obj); //值帶回addTodo函式執行
   txt.value = ""; //文字輸出後，清空文字欄位
-  //新增事項後，會跳回"全部"
+  //再新增事項，tab會跳回"全部"
   if(toggleTab == "work" || toggleTab == "done"){
     allLi.forEach(function(item){
     item.setAttribute("class","");
@@ -209,7 +278,6 @@ function add(e){
     all.setAttribute("class","active");
     toggleTab = "all";
   };
-  renderData();
 }
 
 //優化：Enter鍵新增
@@ -219,16 +287,45 @@ txt.addEventListener("keyup",function(e){
   }
 })
 
-//刪除待辦事項 & 點擊list除了刪除外的地方，checked交換
+//刪除待辦事項 & 編輯待辦事項 & 點擊list除了刪除外的地方，completed_at切換（checked交換）
+const itemContent = document.querySelector(".itemContent");
+const mask = document.querySelector(".mask");
+
 list.addEventListener("click",function(e){
   let num = e.target.getAttribute("data-num");
+  let todoID = e.target.getAttribute("data-id");
   if(e.target.nodeName == "A" && e.target.getAttribute("class") == "delete"){ //點擊刪除按鈕
     e.preventDefault(); //避免網頁往上跑
     data.splice(num,1);
-  }else{ //點擊list刪除外的地方
-    data[num].checked = !data[num].checked; //checked交換
+    deleteTodo(todoID);
+  }else if(e.target.nodeName == "A" && e.target.getAttribute("class") == "pen"){ //點擊編輯按鈕
+    e.preventDefault(); //避免網頁往上跑
+    mask.classList.remove("none");
+    mask.setAttribute("data-id",todoID);
+  }else{ //點擊list刪除外的地方completed_at切換
+    toggleTodo(todoID);
   }
-  renderData();
+})
+
+//編輯清單mask
+mask.addEventListener("click",function(e){
+  let updateContent = maskTxt.value;
+  let todoID = mask.getAttribute("data-id");
+  if(e.target.getAttribute('data-element') === 'confirm-btn'){ //按確認更新按鈕
+    if(maskTxt.value.trim() == ""){ //跳出空值提示
+      e.preventDefault(); //避免網頁往上跑
+      alert("框內不可為空！！");
+      maskTxt.value = ""; //空值輸出後，清空文字欄位
+      return; //切斷執行
+    }else{
+      updateTodo(updateContent,todoID);
+      maskTxt.value = ""; //空值輸出後，清空文字欄位
+      mask.classList.add("none");
+    }    
+  }else if(e.target.getAttribute('data-element') === 'cancel-btn'){ //按取消按鈕
+    e.preventDefault(); //避免網頁往上跑
+    mask.classList.add("none");
+  }
 })
 
 //清除已完成項目
@@ -236,14 +333,11 @@ const btn_clear = document.querySelector(".btn_clear");
 
 btn_clear.addEventListener("click",function(e){
   e.preventDefault(); //避免網頁往上跑
-  let newData = [];
   data.forEach(function(item){
-    if(!item.checked){ //沒打勾的項目新增到newData
-      newData.push(item);
+    if(item.completed_at !== null){ //打勾的項目跑deleteTodo函式（刪除）
+      deleteTodo(item.id);
     }
   });
-  data = newData;
-  renderData();
 })
 
 //tab切換
@@ -267,36 +361,31 @@ const card_list = document.querySelector(".card_list");
 
 function renderData(){
 const todoLength = document.querySelector(".todoLength");
-//沒data，整塊card list隱藏
-if(!data.length){
-  card_list.style.display = "none";
-  return; 
-}else{
-  card_list.style.display = "block";
-}
 
 let str = "";
 let count = 0;
 data.forEach(function(item,index){
-  if(!item.checked){ //沒打勾
+  if(item.completed_at === null){ //沒打勾
     count += 1;
     if(toggleTab == "all" || toggleTab == "work"){
       str += `<li>
             <label class="checkbox" for="">
-            <input type="checkbox"  data-num="${index}"/>
+            <input type="checkbox"  data-num="${index}" data-id="${item.id}"/>
             <span>${item.content}</span>
             </label>
-            <a href="#" class="delete" data-num="${index}"></a>
+            <a href="#" class="pen" data-num="${index}" data-id="${item.id}"></a>
+            <a href="#" class="delete" data-num="${index}" data-id="${item.id}"></a>
             </li>`;
       }
-  }else if(item.checked){ //打勾
+  }else if(item.completed_at !== null){ //打勾
     if(toggleTab == "all" || toggleTab == "done"){
       str += `<li>
             <label class="checkbox" for="">
-            <input type="checkbox" checked data-num="${index}"/>
+            <input type="checkbox" checked data-num="${index}" data-id="${item.id}"/>
             <span>${item.content}</span>
             </label>
-            <a href="#" class="delete" data-num="${index}"></a>
+            <a href="#" class="pen" data-num="${index}" data-id="${item.id}"></a>
+            <a href="#" class="delete" data-num="${index}" data-id="${item.id}"></a>
             </li>`;
       }
   }
